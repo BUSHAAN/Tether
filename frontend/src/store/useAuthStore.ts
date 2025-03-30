@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
-import { AuthUser } from "../Types/AuthUser";
+import { User, SignupUser } from "../Types/AuthUser";
 
 interface useAuthStoreType {
-  authUser: AuthUser | null;
+  authUser: User | null;
   isSigningUp: boolean;
   isLoggingIn: boolean;
   isUpdatingProfile: boolean;
@@ -29,4 +29,17 @@ export const useAuthStore = create<useAuthStoreType>((set) => ({
       set({ isCheckingAuth: false });
     }
   },
+
+  signup: async (userData:SignupUser) => {
+    set({ isSigningUp: true });
+    try {
+      const response = await axiosInstance.post("/auth/signup", userData);
+      set({ authUser: response.data });
+    } catch (error) {
+      console.error("Error signing up:", error);
+    } finally {
+      set({ isSigningUp: false });
+    }
+  }
+
 }));

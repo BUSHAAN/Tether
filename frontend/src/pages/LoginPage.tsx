@@ -1,8 +1,12 @@
+import { User } from "lucide-react";
+
 
 const LoginPage = () => {
   return (
-    <div>LoginPage</div>
-  )
-}
+    <div>
+      <User size={32} color="blue" />
+    </div>
+  );
+};
 
-export default LoginPage
+export default LoginPage;
