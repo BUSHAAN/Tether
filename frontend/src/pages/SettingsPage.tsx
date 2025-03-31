@@ -1,7 +1,7 @@
 
 const SettingsPage = () => {
   return (
-    <div>SettingsPage</div>
+    <div style={{width:"100px", height:"100px", backgroundColor:"blue"}}>SettingsPage</div>
   )
 }
 

@@ -1,35 +1,11 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import Logo from "../assets/logo.png";
+import Logo from "../assets/logo-transparent-cropped.png";
 import { Mail, User, Lock, EyeOff, Eye, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ThreeDMarquee } from "../components/ThreeDMarquee";
-import image1 from "../assets/marqueeImages/1.jpg";
-import image2 from "../assets/marqueeImages/2.jpg";
-import image3 from "../assets/marqueeImages/3.jpg";
-import image4 from "../assets/marqueeImages/4.jpg";
-import image5 from "../assets/marqueeImages/5.jpg";
-import image6 from "../assets/marqueeImages/6.jpg";
-
-const images = [
-  image1,
-  image2,
-  image3,
-  image4,
-  image5,
-  image6,
-  image1,
-  image2,
-  image3,
-  image4,
-  image5,
-  image6,
-  image1,
-  image2,
-  image3,
-  image4,
-  image6,
-];
+import marqueeImages from "../constants/images";
+import toast from "react-hot-toast";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -40,10 +16,23 @@ const SignUpPage = () => {
   });
   const { signup, isSigningUp } = useAuthStore();
 
-  const validateForm = () => {};
+  const validateForm = () => {
+    if (!formData.fullName.trim()) return toast.error("Full Name is required");
+    if (!formData.email.trim()) return toast.error("Email is required");
+    if (
+      !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)
+    )
+      return toast.error("Email is invalid");
+    if (!formData.password.trim()) return toast.error("Password is required");
+    if (formData.password.length < 6)
+      return toast.error("Password must be at least 6 characters long");
+    return true;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const success = validateForm();
+    if (success) signup(formData);
   };
 
   return (
@@ -54,9 +43,9 @@ const SignUpPage = () => {
           {/*logo*/}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
-              <div className="size-32 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                <img src={Logo} alt="Logo" />
-              </div>
+              
+              <img src={Logo} alt="Logo" style={{ width: 150 }} />
+              
               <h1 className="text-2xl font-bold mt-2">Create Account</h1>
               <p className="text-base-content/60">
                 Create an account to get started
@@ -83,7 +72,6 @@ const SignUpPage = () => {
                   }
                   className="input input-bordered w-full pl-10"
                   placeholder="John Doe"
-                  required
                 />
               </div>
             </div>
@@ -104,7 +92,6 @@ const SignUpPage = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, email: e.target.value })
                   }
-                  required
                 />
               </div>
             </div>
@@ -125,7 +112,6 @@ const SignUpPage = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  required
                 />
                 <button
                   type="button"
@@ -170,8 +156,7 @@ const SignUpPage = () => {
         </div>
       </div>
       {/* Right side: Background image or illustration */}
-
-      <ThreeDMarquee images={images} />
+      <ThreeDMarquee images={marqueeImages} />
     </div>
   );
 };
