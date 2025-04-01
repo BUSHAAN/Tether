@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useMessageStore } from "../store/useMessageStore";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
@@ -11,8 +11,18 @@ const ChatContainer = () => {
   const { messages, getMessages, isMessagesLoading, selectedUser } =
     useMessageStore();
   const { authUser } = useAuthStore();
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  
+  const scrollToChild = (child: HTMLDivElement) => {
+    child.scrollIntoView({ behavior: "smooth", block: "end" });
+  };
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      scrollToChild(messagesEndRef.current);
+    }
+  }, [messages]);
+
   useEffect(() => {
     const fetchMessages = async () => {
       if (selectedUser?._id) {
@@ -33,12 +43,13 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-col overflow-auto">
+    <div className="flex-1 flex flex-col h-full">
       <ChatHeader />
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <div
             key={message._id}
+            ref={index === messages.length - 1 ? messagesEndRef : null}
             className={`chat
               ${
                 message.senderId === authUser?._id &&
@@ -66,17 +77,22 @@ const ChatContainer = () => {
             <div className="chat-header mb-1 flex flex-col">
               <time
                 style={{
-                  alignSelf:`${message.senderId == authUser?._id ? "end" : "start"}`,
+                  alignSelf: `${
+                    message.senderId == authUser?._id ? "end" : "start"
+                  }`,
                 }}
                 className="text-xs opacity-50"
               >
                 {formatDate(message.createdAt)}
               </time>
               <div
-              style={{
-                  alignSelf:`${message.senderId == authUser?._id ? "end" : "start"}`,
+                style={{
+                  alignSelf: `${
+                    message.senderId == authUser?._id ? "end" : "start"
+                  }`,
                 }}
-              className="chat-bubble flex flex-col">
+                className="chat-bubble flex flex-col"
+              >
                 {message.image && (
                   <img
                     src={message.image}
