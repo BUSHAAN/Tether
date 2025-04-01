@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { Message, SidebarUser } from "../Types/AuthUser";
+import { useAuthStore } from "./useAuthStore";
 
 interface useMessageStoreType {
   messages: Message[];
@@ -13,6 +14,8 @@ interface useMessageStoreType {
   getMessages: (userId: string) => Promise<void>;
   setSelectedUser: (selectedUser: SidebarUser | null) => void;
   sendMessage: (messageData: { message: string; image: string|null }) => Promise<void>;
+  subscribeToMessages: () => void;
+  unsubscribeFromMessages: () => void;
 }
 
 export const useMessageStore = create<useMessageStoreType>((set, get) => ({
@@ -61,6 +64,26 @@ export const useMessageStore = create<useMessageStoreType>((set, get) => ({
       toast.error("Error sending message");
     }
   },
+
+  subscribeToMessages: () => {
+    const { selectedUser } = get();
+    
+    if (!selectedUser) return;
+
+    const socket = useAuthStore.getState().socket;
+
+    socket?.on("newMessage", (newMessage: Message) => {
+      if (newMessage.senderId === selectedUser._id) {
+        set({ messages: [...get().messages, newMessage] });
+      }
+    })
+  },
+
+  unsubscribeFromMessages: () => {
+    const socket = useAuthStore.getState().socket;
+    socket?.off("newMessage");
+  },
+
   setSelectedUser: (selectedUser: SidebarUser | null) => {
     set({ selectedUser });
   },

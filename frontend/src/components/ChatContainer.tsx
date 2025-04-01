@@ -8,8 +8,14 @@ import DefaultAvatar from "../assets/avatar.png";
 import { formatDate } from "../lib/utils";
 
 const ChatContainer = () => {
-  const { messages, getMessages, isMessagesLoading, selectedUser } =
-    useMessageStore();
+  const {
+    messages,
+    getMessages,
+    isMessagesLoading,
+    selectedUser,
+    subscribeToMessages,
+    unsubscribeFromMessages,
+  } = useMessageStore();
   const { authUser } = useAuthStore();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -30,7 +36,11 @@ const ChatContainer = () => {
       }
     };
     fetchMessages();
-  }, [selectedUser, getMessages]);
+    subscribeToMessages();
+    return () => {
+      unsubscribeFromMessages();
+    };
+  }, [selectedUser, getMessages, subscribeToMessages, unsubscribeFromMessages]);
 
   if (isMessagesLoading) {
     return (
