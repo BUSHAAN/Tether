@@ -36,7 +36,7 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="min-h-screen grid lg:grid-cols-2 overflow-hidden">
+    <div style={{maxHeight:"calc(100vh - 64px)"}} className="min-h-screen grid lg:grid-cols-2 overflow-hidden">
       {/* Left side: Image or illustration */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="max-w-md w-full space-y-8">

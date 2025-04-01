@@ -26,7 +26,6 @@ const LoginPage = () => {
     if (!password.trim()) return toast.error("Password is required"), false;
     if (password.length < 6)
       return toast.error("Password must be at least 6 characters long"), false;
-
     return true;
   };
 
