@@ -1,20 +1,21 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
-import { SidebarUser } from "../Types/AuthUser";
+import { Message, SidebarUser } from "../Types/AuthUser";
 
 interface useMessageStoreType {
-  messages: any[];
+  messages: Message[];
   users: SidebarUser[];
   selectedUser: SidebarUser | null;
   isUsersLoading: boolean;
   isMessagesLoading: boolean;
   getUsers: () => Promise<void>;
   getMessages: (userId: string) => Promise<void>;
-  setSelectedUser: (selectedUser: SidebarUser) => void;
+  setSelectedUser: (selectedUser: SidebarUser | null) => void;
+  sendMessage: (messageData: { message: string; image: string|null }) => Promise<void>;
 }
 
-export const useMessageStore = create<useMessageStoreType>((set) => ({
+export const useMessageStore = create<useMessageStoreType>((set, get) => ({
   messages: [],
   users: [],
   selectedUser: null,
@@ -47,7 +48,20 @@ export const useMessageStore = create<useMessageStoreType>((set) => ({
     }
   },
 
-  setSelectedUser: (selectedUser: SidebarUser) => {
+  sendMessage: async (messageData: { message: string; image: string|null }) => {
+    const { selectedUser, messages } = get();
+    try {
+      const response = await axiosInstance.post(
+        `/messages/send/${selectedUser?._id}`,
+        { ...messageData }
+      );
+      set({ messages: [...messages, response.data] });
+    } catch (error) {
+      console.error("Error sending message:", error);
+      toast.error("Error sending message");
+    }
+  },
+  setSelectedUser: (selectedUser: SidebarUser | null) => {
     set({ selectedUser });
   },
 }));

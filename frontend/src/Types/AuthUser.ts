@@ -1,5 +1,5 @@
 export interface User {
-    id: string;
+    _id: string;
     fullName: string;
     email: string;
     profilePic: string | "";
@@ -17,4 +17,14 @@ export interface SidebarUser {
     _id: string;
     fullName: string;
     profilePic: string | null;
+}
+
+export interface Message {
+    _id: string;
+    senderId: string;
+    receiverId: string;
+    message: string;
+    image?: string;
+    createdAt: string;
+    updatedAt: string;
 }
