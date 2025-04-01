@@ -4,14 +4,15 @@ import Router from "./router/router";
 import { useAuthStore } from "./store/useAuthStore";
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
+import { useThemeStore } from "./store/useThemeStore";
 
 function App() {
   const { checkAuth, authUser, isCheckingAuth } = useAuthStore();
+  const { theme } = useThemeStore();
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
-
 
   if (isCheckingAuth && !authUser)
     return (
@@ -21,11 +22,11 @@ function App() {
     );
 
   return (
-    <>
+    <div data-theme={theme}>
       {authUser && <Navbar />}
       <Router />
       <Toaster position="bottom-left" reverseOrder={false} />
-    </>
+    </div>
   );
 }
 

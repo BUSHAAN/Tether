@@ -1,10 +1,19 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import Logo from "../assets/logo-transparent.png";
-import { LogOut, Settings, User } from "lucide-react";
+import { LogOut, Moon, Sun, User } from "lucide-react";
+import { useThemeStore } from "../store/useThemeStore";
 
 const Navbar = () => {
   const { logout } = useAuthStore();
+  const { theme, setTheme } = useThemeStore();
+
+  const onThemeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTheme = e.target.checked ? "dark" : "nord";
+    setTheme(newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+  };
+
   return (
     <header
       className=" bg-base-100 border-b border-base-300 
@@ -28,15 +37,22 @@ const Navbar = () => {
             </Link>
           </div>
           <div className="flex items-center gap-2">
-            <Link to="/settings" className="btn btn-sm gap-2 transition-colors">
-              <Settings className="size-5" />
-              <span className="hidden sm:inline">Settings</span>
-            </Link>
+            <label className="toggle text-base-content w-11 px-0 h-5.5 rounded-full">
+              <input onChange={
+                onThemeChange
+              } checked={theme === "dark" ? true : false
+              } type="checkbox" className="rounded-full"/>
+              <Sun className="size-5" />
+              <Moon className="size-5" />
+            </label>
             <Link to="/profile" className="btn btn-sm gap-2 transition-colors">
               <User className="size-5" />
               <span className="hidden sm:inline">Profile</span>
             </Link>
-            <button className="flex items-center btn btn-sm gap-2 transition-colors" onClick={logout}>
+            <button
+              className="flex items-center btn btn-sm gap-2 transition-colors"
+              onClick={logout}
+            >
               <LogOut className="size-5" />
               <span className="hidden sm:inline">Logout</span>
             </button>
