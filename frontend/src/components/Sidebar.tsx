@@ -3,12 +3,13 @@ import { useMessageStore } from "../store/useMessageStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 import { Users } from "lucide-react";
 import DefaultAvatar from "../assets/avatar.png";
+import { useAuthStore } from "../store/useAuthStore";
 
 const Sidebar = () => {
   const { users, getUsers, selectedUser, setSelectedUser, isUsersLoading } =
     useMessageStore();
 
-  const onlineUsers = useMessageStore();
+  const {onlineUsers} = useAuthStore();
 
   useEffect(() => {
     const fetchUsers = async () => {
