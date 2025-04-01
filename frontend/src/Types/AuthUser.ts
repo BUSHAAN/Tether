@@ -12,3 +12,9 @@ export interface SignupUser {
     email: string;
     password: string;
 }
+
+export interface SidebarUser {
+    _id: string;
+    fullName: string;
+    profilePic: string | null;
+}

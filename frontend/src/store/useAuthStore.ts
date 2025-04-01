@@ -10,6 +10,7 @@ interface useAuthStoreType {
   isLoggingIn: boolean;
   isUpdatingProfile: boolean;
   isCheckingAuth: boolean;
+  onlineUsers: string[];
   checkAuth: () => Promise<void>;
   signup: (userData: SignupUser) => Promise<void>;
   login: (data: { email: string; password: string }) => Promise<void>;
@@ -23,6 +24,7 @@ export const useAuthStore = create<useAuthStoreType>((set) => ({
   isLoggingIn: false,
   isUpdatingProfile: false,
   isCheckingAuth: true,
+  onlineUsers: [],
 
   checkAuth: async () => {
     try {
