@@ -120,10 +120,10 @@ const LoginPage = () => {
               disabled={isLoggingIn}
             >
               {isLoggingIn ? (
-                <>
+                <div className="flex items-center justify-center w-full">
                   <Loader2 className="animate-spin size-5" />
                   <span className="ml-2">Signing In...</span>
-                </>
+                </div>
               ) : (
                 "Sign In"
               )}
@@ -141,7 +141,9 @@ const LoginPage = () => {
         </div>
       </div>
       {/* Right side: Background image or illustration */}
+      <div className="border-l border-base-300">
       <ThreeDMarquee images={marqueeImages} />
+       </div>
     </div>
   );
 };

@@ -5,12 +5,15 @@ import cloudinary from "../lib/cloudinary.js";
 
 export const signup = async (req, res) => {
   try {
-    const { fullName, email, password } = req.body;
+    let { fullName, email, password } = req.body;
 
     // Check if the user has entered all the required fields
     if (!fullName || !email || !password) {
       return res.status(400).json({ message: "Please enter all fields" });
     }
+
+    email = email.trim().toLowerCase();
+    fullName = fullName.trim();
 
     if (password.length < 6) {
       return res
@@ -19,10 +22,10 @@ export const signup = async (req, res) => {
     }
 
     // Check if the user already exists
-    const user = await User.findOne({
+    const existingUser = await User.findOne({
       email,
     });
-    if (user) {
+    if (existingUser) {
       return res.status(400).json({ message: "Email already exists" });
     }
 
@@ -53,18 +56,20 @@ export const signup = async (req, res) => {
     }
   } catch (error) {
     console.error("Error in signup: ", error.message);
-    res.status(500).json({ message: error.message });
+    res.status(500).json("Internal server error");
   }
 };
 
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
 
     // Check if the user has entered all the required fields
     if (!email || !password) {
       return res.status(400).json({ message: "Please enter all fields" });
     }
+
+    email = email.trim().toLowerCase();
 
     // Check if the user exists
     const user = await User.findOne({
@@ -94,7 +99,7 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in login: ", error.message);
-    res.status(500).json({ message: error.message });
+    res.status(500).json("Internal server error");
   }
 };
 
@@ -104,7 +109,7 @@ export const logout = async (req, res) => {
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Error in logout: ", error.message);
-    res.status(500).json({ message: error.message });
+    res.status(500).json("Internal server error");
   }
 };
 
@@ -134,10 +139,12 @@ export const updateProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res.status(200).json({ updatedUser, message: "Profile updated successfully" });
+    res
+      .status(200)
+      .json({ updatedUser, message: "Profile updated successfully" });
   } catch (error) {
     console.error("Error in updateProfile:", error.message);
-    res.status(500).json({ message: "Server error. Please try again later." });
+    res.status(500).json("Internal server error");
   }
 };
 
@@ -146,6 +153,6 @@ export const checkAuth = async (req, res) => {
     res.status(200).json(req.user);
   } catch (error) {
     console.error("Error in checkAuth: ", error.message);
-    res.status(500).json({ message: error.message });
+    res.status(500).json("Internal server error");
   }
-}
+};
