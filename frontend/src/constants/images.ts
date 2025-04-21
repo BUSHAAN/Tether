@@ -1,4 +1,3 @@
-import ss from "../assets/marqueeImages/ss.png";
 import image1 from "../assets/marqueeImages/1.png";
 import image2 from "../assets/marqueeImages/2.png";
 import image3 from "../assets/marqueeImages/3.png";
