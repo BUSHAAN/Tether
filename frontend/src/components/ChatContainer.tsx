@@ -110,7 +110,7 @@ const ChatContainer = () => {
                     className="mt-2 rounded-lg max-w-xs"
                   />
                 )}
-                {message.message || " error! no message"}
+                {message.message}
               </div>
             </div>
           </div>

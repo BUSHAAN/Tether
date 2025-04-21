@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import Logo from "../assets/logo-transparent.png";
+import LogoLight from "../assets/logo.png";
 import { LogOut, Moon, Sun, User } from "lucide-react";
 import { useThemeStore } from "../store/useThemeStore";
 
@@ -28,20 +29,22 @@ const Navbar = () => {
                transition-all"
             >
               <div
-                className="size-9 rounded-full
+                className="size-9 rounded-full overflow-hidden
                  bg-base-200 flex items-center justify-center"
               >
-                <img src={Logo} alt="Logo" />
+                <img src={theme == "dark" ? Logo : LogoLight} alt="Logo" />
               </div>
               <h1 className="text-lg font-bold">Tether</h1>
             </Link>
           </div>
           <div className="flex items-center gap-2">
             <label className="toggle text-base-content w-11 px-0 h-5.5 rounded-full">
-              <input onChange={
-                onThemeChange
-              } checked={theme === "dark" ? true : false
-              } type="checkbox" className="rounded-full"/>
+              <input
+                onChange={onThemeChange}
+                checked={theme === "dark" ? true : false}
+                type="checkbox"
+                className="rounded-full"
+              />
               <Sun className="size-5" />
               <Moon className="size-5" />
             </label>

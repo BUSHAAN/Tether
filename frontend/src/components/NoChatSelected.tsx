@@ -1,6 +1,10 @@
-import Logo from "../assets/logo-transparent-cropped.png";
+import LogoTransparent from "../assets/logo-transparent-cropped.png";
+import Logo from "../assets/logo-cropped.png";
+
+import { useThemeStore } from "../store/useThemeStore";
 
 const NoChatSelected = () => {
+  const { theme } = useThemeStore();
   return (
     <div className="w-full flex flex-1 flex-col items-center justify-center p-16 bg-base-100/50">
       <div className="max-w-md text-center space-y-6">
@@ -8,10 +12,11 @@ const NoChatSelected = () => {
         <div className="flex justify-center gap-4 mb-4">
           <div className="relative">
             <div
-              className="w-20 h-20 p-2 rounded-2xl bg-primary/10 flex items-center
-             justify-center animate-bounce"
+              className={`w-20 h-20 p-2 rounded-2xl flex items-center justify-center animate-bounce ${
+                theme === 'dark' ?  'bg-primary/10':'bg-[#242629]'
+              }`}
             >
-              <img src={Logo} />
+              <img src={theme == "dark" ? LogoTransparent : Logo} />
             </div>
           </div>
         </div>

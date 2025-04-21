@@ -1,11 +1,12 @@
 import { useAuthStore } from "../store/useAuthStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Logo from "../assets/logo-transparent-cropped.png";
 import { Mail, Lock, EyeOff, Eye, Loader2 } from "lucide-react";
 import { ThreeDMarquee } from "../components/ThreeDMarquee";
 import marqueeImages from "../constants/images";
 import { Link } from "react-router-dom";
+import { useThemeStore } from "../store/useThemeStore";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +16,7 @@ const LoginPage = () => {
   });
 
   const { login, isLoggingIn } = useAuthStore();
+  const { setTheme } = useThemeStore();
 
   const validateForm = () => {
     const { email, password } = formData;
@@ -35,9 +37,13 @@ const LoginPage = () => {
     if (success) login(formData);
   };
 
+  useEffect(() => {
+    setTheme("dark");
+  }, [setTheme]);
+
   return (
-    <div className="min-h-screen grid lg:grid-cols-2 overflow-hidden">
-      {/* Left side: Image or illustration */}
+    <div className="min-h-screen grid lg:grid-cols-2 overflow-hidden ">
+      {/* Left side: form */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="max-w-md w-full space-y-8">
           {/*logo*/}
