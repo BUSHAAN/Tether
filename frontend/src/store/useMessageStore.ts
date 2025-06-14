@@ -17,6 +17,7 @@ interface useMessageStoreType {
     message: string;
     image: string | null;
   }) => Promise<void>;
+  viewMessages: (userId: string) => Promise<void>;
   subscribeToMessages: () => void;
   unsubscribeFromMessages: () => void;
 }
@@ -68,6 +69,24 @@ export const useMessageStore = create<useMessageStoreType>((set, get) => ({
     } catch (error) {
       console.error("Error sending message:", error);
       toast.error("Error sending message");
+    }
+  },
+
+  viewMessages: async (recieverId: string) => {
+    try {
+      const response = await axiosInstance.post(
+        `/messages/view/${recieverId}`
+      );
+      const updatedUsers = get().users.map((user) =>
+        user._id === recieverId
+          ? { ...user, unreadMessageCount: 0 }
+          : user
+      );
+      set({ users: updatedUsers });
+      
+    } catch (error) {
+      console.error("Error viewing messages:", error);
+      toast.error("Error viewing messages");
     }
   },
 

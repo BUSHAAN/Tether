@@ -7,16 +7,33 @@ import { useAuthStore } from "../store/useAuthStore";
 import DefaultAvatar from "../assets/avatar.png";
 import { formatDate } from "../lib/utils";
 import BouncingIcon from "./BouncingIcon";
+import toast from "react-hot-toast";
 
 const ChatContainer = () => {
-  const { messages, getMessages, isMessagesLoading, selectedUser } =
-    useMessageStore();
+  const {
+    messages,
+    getMessages,
+    viewMessages,
+    isMessagesLoading,
+    selectedUser,
+  } = useMessageStore();
   const { authUser } = useAuthStore();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const scrollToChild = (child: HTMLDivElement) => {
     child.scrollIntoView({ behavior: "smooth", block: "end" });
   };
+
+  useEffect(() => {
+    try {
+      if (selectedUser?._id) {
+        viewMessages(selectedUser._id);
+      }
+    } catch (error) {
+      console.error("Error in ChatContainer useEffect:", error);
+      toast.error("Failed to load messages. Please try again.");
+    }
+  }, [selectedUser]);
 
   useEffect(() => {
     if (messagesEndRef.current) {

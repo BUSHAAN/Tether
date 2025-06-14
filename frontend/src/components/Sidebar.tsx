@@ -36,7 +36,7 @@ const Sidebar = () => {
           <button
             key={user._id}
             className={`w-full p-3 flex items-center gap-3
-            hover:bg-base-300 transition-colors
+            hover:bg-base-300 transition-colors relative
             ${
               selectedUser?._id === user._id
                 ? "bg-base-300 ring-1 ring-base-300"
@@ -65,9 +65,17 @@ const Sidebar = () => {
               </div>
             </div>
             {user.unreadMessageCount > 0 && (
-              <div className="w-5 h-5 bg-green-600 rounded-full text-white text-xs font-semibold flex items-center justify-center">
-                {user?.unreadMessageCount}
-              </div>
+              <>
+                {/* Large screen badge (default position, visible on lg and up) */}
+                <div className="w-5 h-5 bg-green-600 rounded-full text-white text-xs font-semibold flex items-center justify-center hidden lg:flex">
+                  {user.unreadMessageCount}
+                </div>
+
+                {/* Small screen badge (top-right of avatar) */}
+                <div className="absolute top-2 right-2 w-5 h-5 bg-green-600 ring-2 ring-zinc-900 rounded-full text-white text-xs font-semibold flex items-center justify-center lg:hidden">
+                  {user.unreadMessageCount}
+                </div>
+              </>
             )}
           </button>
         ))}

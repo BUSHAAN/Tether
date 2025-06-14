@@ -98,3 +98,31 @@ export const sendMessage = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const viewMessages = async (req, res) => {
+  try {
+    const { id: userToChat } = req.params;
+    const loggedInUserId = req.user._id;
+
+    if (
+      !mongoose.Types.ObjectId.isValid(userToChat) ||
+      !mongoose.Types.ObjectId.isValid(loggedInUserId)
+    ) {
+      return res.status(400).json({ message: "Invalid user ID format" });
+    }
+
+    await Message.updateMany(
+      {
+        senderId: userToChat,
+        receiverId: loggedInUserId,
+        read: false,
+      },
+      { read: true }
+    );
+
+    res.status(200).json({ message: "Messages marked as read" });
+  } catch (error) {
+    console.error("Error in viewMessages: ", error.message);
+    res.status(500).json({ message: error.message });
+  }
+}
