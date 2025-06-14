@@ -6,16 +6,11 @@ import MessageSkeleton from "./skeletons/MessageSkeleton";
 import { useAuthStore } from "../store/useAuthStore";
 import DefaultAvatar from "../assets/avatar.png";
 import { formatDate } from "../lib/utils";
+import BouncingIcon from "./BouncingIcon";
 
 const ChatContainer = () => {
-  const {
-    messages,
-    getMessages,
-    isMessagesLoading,
-    selectedUser,
-    subscribeToMessages,
-    unsubscribeFromMessages,
-  } = useMessageStore();
+  const { messages, getMessages, isMessagesLoading, selectedUser } =
+    useMessageStore();
   const { authUser } = useAuthStore();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
@@ -36,11 +31,7 @@ const ChatContainer = () => {
       }
     };
     fetchMessages();
-    subscribeToMessages();
-    return () => {
-      unsubscribeFromMessages();
-    };
-  }, [selectedUser, getMessages, subscribeToMessages, unsubscribeFromMessages]);
+  }, [selectedUser, getMessages]);
 
   if (isMessagesLoading) {
     return (
@@ -56,11 +47,21 @@ const ChatContainer = () => {
     <div className="flex-1 flex flex-col h-full">
       <ChatHeader />
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message, index) => (
-          <div
-            key={message._id}
-            ref={index === messages.length - 1 ? messagesEndRef : null}
-            className={`chat
+        {messages.length === 0 ? (
+          <>
+            <div className="w-full h-full flex flex-col justify-center items-center">
+              <BouncingIcon />
+              <div className="text-center text-base-content/60 text-2xl relative bottom-4">
+                No chats to display!
+              </div>
+            </div>
+          </>
+        ) : (
+          messages.map((message, index) => (
+            <div
+              key={message._id}
+              ref={index === messages.length - 1 ? messagesEndRef : null}
+              className={`chat
               ${
                 message.senderId === authUser?._id &&
                 message.receiverId === selectedUser?._id
@@ -71,50 +72,51 @@ const ChatContainer = () => {
                   : "hidden"
               }
             `}
-          >
-            <div className="chat-image avatar">
-              <div className="size-10 rounded-full">
-                <img
-                  src={
-                    message.senderId == authUser?._id
-                      ? authUser?.profilePic || DefaultAvatar
-                      : selectedUser?.profilePic || DefaultAvatar
-                  }
-                  alt="User"
-                />
-              </div>
-            </div>
-            <div className="chat-header mb-1 flex flex-col">
-              <time
-                style={{
-                  alignSelf: `${
-                    message.senderId == authUser?._id ? "end" : "start"
-                  }`,
-                }}
-                className="text-xs opacity-50"
-              >
-                {formatDate(message.createdAt)}
-              </time>
-              <div
-                style={{
-                  alignSelf: `${
-                    message.senderId == authUser?._id ? "end" : "start"
-                  }`,
-                }}
-                className="chat-bubble flex flex-col"
-              >
-                {message.image && (
+            >
+              <div className="chat-image avatar">
+                <div className="size-10 rounded-full">
                   <img
-                    src={message.image}
-                    alt="Message"
-                    className="mt-2 rounded-lg max-w-xs"
+                    src={
+                      message.senderId == authUser?._id
+                        ? authUser?.profilePic || DefaultAvatar
+                        : selectedUser?.profilePic || DefaultAvatar
+                    }
+                    alt="User"
                   />
-                )}
-                {message.message}
+                </div>
+              </div>
+              <div className="chat-header mb-1 flex flex-col">
+                <time
+                  style={{
+                    alignSelf: `${
+                      message.senderId == authUser?._id ? "end" : "start"
+                    }`,
+                  }}
+                  className="text-xs opacity-50"
+                >
+                  {formatDate(message.createdAt)}
+                </time>
+                <div
+                  style={{
+                    alignSelf: `${
+                      message.senderId == authUser?._id ? "end" : "start"
+                    }`,
+                  }}
+                  className="chat-bubble flex flex-col"
+                >
+                  {message.image && (
+                    <img
+                      src={message.image}
+                      alt="Message"
+                      className="mt-2 rounded-lg max-w-xs"
+                    />
+                  )}
+                  {message.message}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
       <MessageInput />
     </div>

@@ -9,7 +9,7 @@ const Sidebar = () => {
   const { users, getUsers, selectedUser, setSelectedUser, isUsersLoading } =
     useMessageStore();
 
-  const {onlineUsers} = useAuthStore();
+  const { onlineUsers } = useAuthStore();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -58,12 +58,17 @@ const Sidebar = () => {
                 ></div>
               )}
             </div>
-            <div className="hidden lg:block text-left min-w-0">
+            <div className="hidden lg:block text-left min-w-0 flex-1">
               <div className="font-medium truncate">{user.fullName}</div>
               <div className="text-sm text-zinc-400 truncate">
                 {onlineUsers.includes(user._id) ? "Online" : "Offline"}
               </div>
             </div>
+            {user.unreadMessageCount > 0 && (
+              <div className="w-5 h-5 bg-green-600 rounded-full text-white text-xs font-semibold flex items-center justify-center">
+                {user?.unreadMessageCount}
+              </div>
+            )}
           </button>
         ))}
       </div>

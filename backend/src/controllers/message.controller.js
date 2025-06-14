@@ -11,7 +11,21 @@ export const getUsersforSidebar = async (req, res) => {
     const filteredUsers = await User.find({
       _id: { $ne: loggedInUserId },
     }).select("_id fullName profilePic");
-    res.status(200).json(filteredUsers);
+    const filteredUsersWithUnreadCount = await Promise.all(
+      filteredUsers.map(async (user) => {
+        user = user.toObject(); // Convert Mongoose document to plain object
+        const count = await Message.countDocuments({
+          receiverId: loggedInUserId,
+          senderId: user._id,
+          read: false,
+        });
+        return {
+          ...user,
+          unreadMessageCount: count,
+        };
+      })
+    );
+    res.status(200).json(filteredUsersWithUnreadCount);
   } catch (error) {
     console.error("Error in getUsersforSidebar: ", error.message);
     res.status(500).json({ message: error.message });
@@ -23,7 +37,10 @@ export const getMessages = async (req, res) => {
     const { id: userToChat } = req.params;
     const loggedInUserId = req.user._id;
 
-    if (!mongoose.Types.ObjectId.isValid(userToChat) || !mongoose.Types.ObjectId.isValid(loggedInUserId)) {
+    if (
+      !mongoose.Types.ObjectId.isValid(userToChat) ||
+      !mongoose.Types.ObjectId.isValid(loggedInUserId)
+    ) {
       return res.status(400).json({ message: "Invalid user ID format" });
     }
 
@@ -72,7 +89,7 @@ export const sendMessage = async (req, res) => {
     const recieverSocketId = getRecieverSocketId(receiverId);
 
     if (recieverSocketId) {
-      io.to(recieverSocketId).emit("newMessage",newMessage);
+      io.to(recieverSocketId).emit("newMessage", newMessage);
     }
 
     res.status(200).json(newMessage);

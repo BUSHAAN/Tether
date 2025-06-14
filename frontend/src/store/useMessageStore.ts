@@ -13,7 +13,10 @@ interface useMessageStoreType {
   getUsers: () => Promise<void>;
   getMessages: (userId: string) => Promise<void>;
   setSelectedUser: (selectedUser: SidebarUser | null) => void;
-  sendMessage: (messageData: { message: string; image: string|null }) => Promise<void>;
+  sendMessage: (messageData: {
+    message: string;
+    image: string | null;
+  }) => Promise<void>;
   subscribeToMessages: () => void;
   unsubscribeFromMessages: () => void;
 }
@@ -51,7 +54,10 @@ export const useMessageStore = create<useMessageStoreType>((set, get) => ({
     }
   },
 
-  sendMessage: async (messageData: { message: string; image: string|null }) => {
+  sendMessage: async (messageData: {
+    message: string;
+    image: string | null;
+  }) => {
     const { selectedUser, messages } = get();
     try {
       const response = await axiosInstance.post(
@@ -66,17 +72,23 @@ export const useMessageStore = create<useMessageStoreType>((set, get) => ({
   },
 
   subscribeToMessages: () => {
-    const { selectedUser } = get();
-    
-    if (!selectedUser) return;
-
     const socket = useAuthStore.getState().socket;
 
     socket?.on("newMessage", (newMessage: Message) => {
-      if (newMessage.senderId === selectedUser._id) {
-        set({ messages: [...get().messages, newMessage] });
+      const currentUsers = get().users;
+      const updatedUsers = currentUsers.map((user) =>
+        user._id === newMessage.senderId
+      ? { ...user, unreadMessageCount: user.unreadMessageCount + 1 }
+      : user
+    );
+      set({ users: updatedUsers });
+
+      const selectedUser = get().selectedUser;
+      if (selectedUser && selectedUser._id === newMessage.senderId) {
+        const currentMessages = get().messages;
+        set({ messages: [...currentMessages, newMessage] });
       }
-    })
+    });
   },
 
   unsubscribeFromMessages: () => {

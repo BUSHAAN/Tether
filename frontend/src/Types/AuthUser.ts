@@ -17,6 +17,7 @@ export interface SidebarUser {
     _id: string;
     fullName: string;
     profilePic: string | null;
+    unreadMessageCount: number;
 }
 
 export interface Message {
