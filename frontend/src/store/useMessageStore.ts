@@ -74,7 +74,7 @@ export const useMessageStore = create<useMessageStoreType>((set, get) => ({
 
   viewMessages: async (recieverId: string) => {
     try {
-      const response = await axiosInstance.post(
+      await axiosInstance.post(
         `/messages/view/${recieverId}`
       );
       const updatedUsers = get().users.map((user) =>
