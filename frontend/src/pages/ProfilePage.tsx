@@ -1,8 +1,9 @@
-import { Camera, Mail, Pencil, User } from "lucide-react";
+import { Camera, Mail, Pencil, User, X } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import DefaultAvatar from "../assets/avatar.png";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 const ProfilePage = () => {
   const { authUser, isUpdatingProfile, updateProfile } = useAuthStore();
 
@@ -48,7 +49,10 @@ const ProfilePage = () => {
   return (
     <div className="h-screen pt-20">
       <div className="max-w-2xl mx-auto p-4 py-8">
-        <div className="bg-base-300 rounded-xl p-6 space-y-8">
+        <div className="bg-base-300 rounded-xl p-6 space-y-8 relative">
+          <Link to="/" className="absolute right-4 top-4">
+            <X />
+          </Link>
           <div className="text-center">
             <h1 className="text-2xl font-bold">Profile</h1>
             <p className="mt-2">Manage your profile settings</p>

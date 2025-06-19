@@ -64,7 +64,10 @@ const Sidebar = () => {
                 {onlineUsers.includes(user._id) ? "Online" : "Offline"}
               </div>
             </div>
-            {user.unreadMessageCount > 0 && (
+            {((selectedUser &&
+              selectedUser._id != user._id &&
+              user.unreadMessageCount > 0) ||
+              (!selectedUser && user.unreadMessageCount > 0)) && (
               <>
                 {/* Large screen badge (default position, visible on lg and up) */}
                 <div className="w-5 h-5 bg-green-600 rounded-full text-white text-xs font-semibold flex items-center justify-center hidden lg:flex">

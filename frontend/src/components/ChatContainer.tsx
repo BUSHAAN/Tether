@@ -33,7 +33,7 @@ const ChatContainer = () => {
       console.error("Error in ChatContainer useEffect:", error);
       toast.error("Failed to load messages. Please try again.");
     }
-  }, [selectedUser]);
+  }, [selectedUser,messages]);
 
   useEffect(() => {
     if (messagesEndRef.current) {
