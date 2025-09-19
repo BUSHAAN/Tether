@@ -1,5 +1,14 @@
 # 📡 Tether – Real-Time Chat App
 
+<p>
+  <a href="https://reactjs.org/"><img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"/></a>
+  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS"/></a>
+  <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node.js"/></a>
+  <a href="https://www.mongodb.com/"><img src="https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB"/></a>
+  <a href="https://socket.io/"><img src="https://img.shields.io/badge/Socket.IO-010101?style=for-the-badge&logo=socket.io&logoColor=white" alt="Socket.IO"/></a>
+  <a href="https://cloudinary.com/"><img src="https://img.shields.io/badge/Cloudinary-0033CC?style=for-the-badge&logo=cloudinary&logoColor=white" alt="Cloudinary"/></a>
+</p>
+
 Tether is a simple real-time chat application built with the MERN stack. Originally started as a practice project to learn **Socket.IO**, it evolved into a fully functional messaging app with real-time capabilities and a responsive UI.
 
 🌐 **Live Demo:** [https://tether.ip-ddns.com](https://tether.ip-ddns.com)
