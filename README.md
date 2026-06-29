@@ -18,10 +18,13 @@ Tether is a simple real-time chat application built with the MERN stack. Origina
 ## ✨ Features
 
 - 🔒 User Authentication (JWT-based)
+- 👥 Contact Management (search and add contacts; sidebar shows your contacts only)
 - 💬 Real-Time Messaging (Socket.IO)
 - 🖼️ Image Sharing (via Cloudinary)
 - 🟢 Online/Offline Presence Indicators
 - 🕓 Message History Persistence
+- 📬 Unread Message Counts (badges in the sidebar)
+- 👤 Unknown Sender Privacy (non-contacts appear by email until you add them)
 - 📱 Fully Responsive UI (Mobile-friendly)
 - 🔜 Group Chats (coming soon)
 
@@ -98,6 +101,8 @@ npm run dev
  - ✅ 1-on-1 private messaging
  - ✅ Image messaging
  - ✅ Online/offline presence
+ - ✅ Contact management
+ - ✅ Unread message counts
  - 🟩 Typing indicators
  - 🟩 Group chats
  - 🟩 Emoji reactions
