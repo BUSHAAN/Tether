@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
+import Contact from "../models/contact.model.js";
 import cloudinary from "../lib/cloudinary.js";
 import { getRecieverSocketId } from "../lib/socket.js";
 import { io } from "../lib/socket.js";
@@ -8,24 +9,85 @@ import { io } from "../lib/socket.js";
 export const getUsersforSidebar = async (req, res) => {
   try {
     const loggedInUserId = req.user._id;
-    const filteredUsers = await User.find({
-      _id: { $ne: loggedInUserId },
-    }).select("_id fullName profilePic");
-    const filteredUsersWithUnreadCount = await Promise.all(
-      filteredUsers.map(async (user) => {
-        user = user.toObject(); // Convert Mongoose document to plain object
-        const count = await Message.countDocuments({
+
+    const contacts = await Contact.find({ userId: loggedInUserId }).select(
+      "contactId"
+    );
+    const contactIds = new Set(
+      contacts.map((c) => c.contactId.toString())
+    );
+
+    const conversationPartners = await Message.aggregate([
+      {
+        $match: {
+          $or: [
+            { senderId: loggedInUserId },
+            { receiverId: loggedInUserId },
+          ],
+        },
+      },
+      {
+        $project: {
+          partnerId: {
+            $cond: {
+              if: { $eq: ["$senderId", loggedInUserId] },
+              then: "$receiverId",
+              else: "$senderId",
+            },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$partnerId",
+        },
+      },
+    ]);
+
+    const partnerIds = conversationPartners.map((p) => p._id.toString());
+    const allUserIds = new Set([...contactIds, ...partnerIds]);
+
+    if (allUserIds.size === 0) {
+      return res.status(200).json([]);
+    }
+
+    const users = await User.find({
+      _id: { $in: Array.from(allUserIds) },
+    }).select("_id fullName email profilePic");
+
+    const usersWithMetadata = await Promise.all(
+      users.map(async (user) => {
+        const userObj = user.toObject();
+        const isContact = contactIds.has(userObj._id.toString());
+
+        const unreadMessageCount = await Message.countDocuments({
           receiverId: loggedInUserId,
-          senderId: user._id,
+          senderId: userObj._id,
           read: false,
         });
+
         return {
-          ...user,
-          unreadMessageCount: count,
+          _id: userObj._id,
+          profilePic: userObj.profilePic,
+          email: userObj.email,
+          unreadMessageCount,
+          isContact,
+          ...(isContact && { fullName: userObj.fullName }),
         };
       })
     );
-    res.status(200).json(filteredUsersWithUnreadCount);
+
+    usersWithMetadata.sort((a, b) => {
+      if (a.isContact !== b.isContact) return a.isContact ? -1 : 1;
+      if (b.unreadMessageCount !== a.unreadMessageCount) {
+        return b.unreadMessageCount - a.unreadMessageCount;
+      }
+      const nameA = a.isContact ? a.fullName : a.email;
+      const nameB = b.isContact ? b.fullName : b.email;
+      return (nameA || "").localeCompare(nameB || "");
+    });
+
+    res.status(200).json(usersWithMetadata);
   } catch (error) {
     console.error("Error in getUsersforSidebar: ", error.message);
     res.status(500).json({ message: error.message });
@@ -67,10 +129,28 @@ export const sendMessage = async (req, res) => {
       return res.status(400).json({ message: "Please add a message or image" });
     }
 
-    if (receiverId === senderId) {
+    if (receiverId === senderId.toString()) {
       return res
         .status(400)
         .json({ message: "You cannot send message to yourself" });
+    }
+
+    const isContact = await Contact.findOne({
+      userId: senderId,
+      contactId: receiverId,
+    });
+
+    if (!isContact) {
+      const hasReceivedFromReceiver = await Message.exists({
+        senderId: receiverId,
+        receiverId: senderId,
+      });
+
+      if (!hasReceivedFromReceiver) {
+        return res.status(403).json({
+          message: "Add this user as a contact before messaging",
+        });
+      }
     }
 
     let imageUrl;
@@ -125,4 +205,4 @@ export const viewMessages = async (req, res) => {
     console.error("Error in viewMessages: ", error.message);
     res.status(500).json({ message: error.message });
   }
-}
+};

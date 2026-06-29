@@ -1,8 +1,13 @@
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { SidebarUser } from "../Types/AuthUser";
  
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function getDisplayName(user: SidebarUser) {
+  return user.isContact ? user.fullName! : user.email;
 }
 
 export function formatDate(dateString: string) {

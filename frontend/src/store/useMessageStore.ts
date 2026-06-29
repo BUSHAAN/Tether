@@ -94,18 +94,30 @@ export const useMessageStore = create<useMessageStoreType>((set, get) => ({
     const socket = useAuthStore.getState().socket;
 
     socket?.on("newMessage", (newMessage: Message) => {
-      const currentUsers = get().users;
-      const updatedUsers = currentUsers.map((user) =>
-        user._id === newMessage.senderId
-      ? { ...user, unreadMessageCount: user.unreadMessageCount + 1 }
-      : user
-    );
-      set({ users: updatedUsers });
-
       const selectedUser = get().selectedUser;
-      if (selectedUser && selectedUser._id === newMessage.senderId) {
+      const isChatOpen = selectedUser?._id === newMessage.senderId;
+
+      if (isChatOpen) {
         const currentMessages = get().messages;
         set({ messages: [...currentMessages, newMessage] });
+        get().viewMessages(newMessage.senderId);
+        return;
+      }
+
+      const currentUsers = get().users;
+      const senderExists = currentUsers.some(
+        (user) => user._id === newMessage.senderId
+      );
+
+      if (!senderExists) {
+        get().getUsers();
+      } else {
+        const updatedUsers = currentUsers.map((user) =>
+          user._id === newMessage.senderId
+            ? { ...user, unreadMessageCount: user.unreadMessageCount + 1 }
+            : user
+        );
+        set({ users: updatedUsers });
       }
     });
   },

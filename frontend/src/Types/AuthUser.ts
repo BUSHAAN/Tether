@@ -15,9 +15,11 @@ export interface SignupUser {
 
 export interface SidebarUser {
     _id: string;
-    fullName: string;
     profilePic: string | null;
     unreadMessageCount: number;
+    isContact: boolean;
+    fullName?: string;
+    email: string;
 }
 
 export interface Message {
