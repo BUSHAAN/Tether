@@ -331,7 +331,7 @@ function HeroChatVisual() {
             <Bubble side="them" delay={0.75}>
               Perfect. I’ll send the spot.
             </Bubble>
-            <Bubble side="me" delay={0.95} image>
+            <Bubble side="them" delay={0.95} image>
               Shared a photo
             </Bubble>
           </div>
@@ -410,9 +410,13 @@ function Bubble({
             isMe ? "rounded-br-md bg-[var(--lp-accent)]/20" : "rounded-bl-md bg-[#1e1e24]"
           }`}
         >
-          <div className="flex h-24 items-center justify-center bg-gradient-to-br from-[#2a2a32] to-[#1a1a1e]">
-            <ImageIcon className="size-7 text-white/35" aria-hidden="true" />
-          </div>
+          <img
+            src="/spot.jpg"
+            alt=""
+            className="h-28 w-full object-cover"
+            width={280}
+            height={112}
+          />
           <p
             className={`px-3 py-2 text-xs ${
               isMe ? "text-[var(--lp-accent)]" : "text-[var(--lp-muted)]"
