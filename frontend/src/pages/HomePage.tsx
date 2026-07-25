@@ -21,8 +21,8 @@ const HomePage = () => {
   return (
     <div className="relative h-dvh overflow-hidden">
       <div className="app-atmosphere" aria-hidden="true" />
-      <div className="relative z-10 flex h-full items-center justify-center px-3 py-20 sm:px-4">
-        <div className="flex h-[calc(100dvh-8rem)] w-full max-w-6xl overflow-hidden rounded-[var(--t-radius-lg)] border border-[var(--t-border)] bg-[var(--t-surface)] shadow-2xl shadow-black/40">
+      <div className="absolute inset-x-3 top-20 bottom-4 z-10 flex justify-center sm:inset-x-4 sm:bottom-5">
+        <div className="flex h-full w-full max-w-6xl overflow-hidden rounded-[var(--t-radius-lg)] border border-[var(--t-border)] bg-[var(--t-surface)] shadow-2xl shadow-black/40">
           <Sidebar />
           {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
         </div>
