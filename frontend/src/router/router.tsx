@@ -6,7 +6,7 @@ const Router = () => {
   const { authUser } = useAuthStore();
   return (
     <Routes>
-      {NavigationConfig.map(({ path, element, isProtected }, index) => (
+      {NavigationConfig.map(({ path, element, isProtected, guestOnly }, index) => (
         <Route
           key={index}
           path={path}
@@ -15,12 +15,12 @@ const Router = () => {
               element
             ) : isProtected ? (
               authUser ? (
-                element //route protected user is authenticated
+                element
               ) : (
-                <Navigate to="/login" replace /> //route protected user is not authenticated
+                <Navigate to="/login" replace />
               )
-            ) : authUser ? (
-              <Navigate to="/" replace /> //route not protected user is authenticated (login/signup)
+            ) : guestOnly && authUser ? (
+              <Navigate to="/chat" replace />
             ) : (
               element
             )

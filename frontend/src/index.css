@@ -2,3 +2,127 @@
 @plugin "daisyui" {
   themes: cupcake --default, dark --prefersdark, light, lofi, autumn, nord;
 }
+
+/* —— Landing page (scoped, brand-locked) —— */
+.landing {
+  --lp-bg: #0a0a0b;
+  --lp-surface: #121214;
+  --lp-text: #f2f2f4;
+  --lp-muted: #94949e;
+  --lp-accent: #6ee7b7;
+  --lp-accent-soft: color-mix(in srgb, var(--lp-accent) 14%, transparent);
+  --lp-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --lp-body: "Figtree", system-ui, sans-serif;
+  position: relative;
+  background: var(--lp-bg);
+  font-family: var(--lp-body);
+  color-scheme: dark;
+}
+
+.landing-atmosphere {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 90% 60% at 10% -10%, rgba(110, 231, 183, 0.09), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 95% 15%, rgba(255, 255, 255, 0.04), transparent 50%),
+    radial-gradient(ellipse 60% 40% at 50% 100%, rgba(110, 231, 183, 0.04), transparent 55%),
+    var(--lp-bg);
+}
+
+.landing-grain {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  opacity: 0.35;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 180px 180px;
+}
+
+.lp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  padding: 0.55rem 1.15rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-decoration: none;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+  cursor: pointer;
+  min-height: 44px;
+}
+
+.lp-btn:focus-visible {
+  outline: 2px solid var(--lp-accent);
+  outline-offset: 3px;
+}
+
+.lp-btn:active {
+  transform: scale(0.98);
+}
+
+.lp-btn-lg {
+  padding: 0.75rem 1.4rem;
+  font-size: 0.95rem;
+  min-height: 48px;
+}
+
+.lp-btn-primary {
+  background: var(--lp-accent);
+  color: #0a0a0b;
+  border: 1px solid transparent;
+}
+
+.lp-btn-primary:hover {
+  background: #8ef0c8;
+}
+
+.lp-btn-secondary {
+  background: transparent;
+  color: var(--lp-text);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.lp-btn-secondary:hover {
+  border-color: rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.lp-btn-ghost {
+  background: transparent;
+  color: var(--lp-muted);
+  border: 1px solid transparent;
+}
+
+.lp-btn-ghost:hover {
+  color: var(--lp-text);
+}
+
+.lp-hero-glow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse 80% 50% at 60% 0%,
+    rgba(110, 231, 183, 0.1),
+    transparent 60%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-btn:active {
+    transform: none;
+  }
+}

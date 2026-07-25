@@ -24,7 +24,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-full">
           <div className="flex items-center gap-8">
             <Link
-              to="/"
+              to="/chat"
               className="flex items-center gap-2.5 hover:opacity-80
                transition-all"
             >
