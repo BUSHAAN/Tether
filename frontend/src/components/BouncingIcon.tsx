@@ -1,18 +1,11 @@
 import LogoTransparent from "../assets/logo-transparent-cropped.png";
-import Logo from "../assets/logo-cropped.png";
-import { useThemeStore } from "../store/useThemeStore";
 
 const BouncingIcon = () => {
-  const { theme } = useThemeStore();
   return (
-    <div className="flex justify-center gap-4 mb-4 ">
+    <div className="mb-4 flex justify-center gap-4">
       <div className="relative">
-        <div
-          className={`w-20 h-20 p-2 rounded-2xl flex items-center justify-center animate-bounce ${
-            theme === "dark" ? "bg-primary/10" : "bg-[#242629]"
-          }`}
-        >
-          <img src={theme == "dark" ? LogoTransparent : Logo} />
+        <div className="flex size-20 animate-bounce items-center justify-center rounded-2xl bg-[var(--t-accent-soft)] p-2">
+          <img src={LogoTransparent} alt="" className="h-full w-auto" />
         </div>
       </div>
     </div>

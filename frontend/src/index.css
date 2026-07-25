@@ -1,22 +1,74 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: cupcake --default, dark --prefersdark, light, lofi, autumn, nord;
+  themes: dark --default;
 }
 
-/* —— Landing page (scoped, brand-locked) —— */
-.landing {
-  --lp-bg: #0a0a0b;
-  --lp-surface: #121214;
-  --lp-text: #f2f2f4;
-  --lp-muted: #94949e;
-  --lp-accent: #6ee7b7;
-  --lp-accent-soft: color-mix(in srgb, var(--lp-accent) 14%, transparent);
-  --lp-display: "Bricolage Grotesque", system-ui, sans-serif;
-  --lp-body: "Figtree", system-ui, sans-serif;
-  position: relative;
-  background: var(--lp-bg);
-  font-family: var(--lp-body);
+/* —— Tether design system (brand-locked) —— */
+:root {
+  --t-bg: #0a0a0b;
+  --t-surface: #121214;
+  --t-surface-2: #1a1a1e;
+  --t-surface-3: #222228;
+  --t-border: rgba(255, 255, 255, 0.08);
+  --t-border-strong: rgba(255, 255, 255, 0.16);
+  --t-text: #f2f2f4;
+  --t-muted: #94949e;
+  --t-faint: #6b6b74;
+  --t-accent: #6ee7b7;
+  --t-accent-hover: #8ef0c8;
+  --t-accent-soft: color-mix(in srgb, var(--t-accent) 14%, transparent);
+  --t-accent-ink: #0a0a0b;
+  --t-warning: #f5c842;
+  --t-warning-soft: color-mix(in srgb, var(--t-warning) 16%, transparent);
+  --t-danger: #f87171;
+  --t-radius: 0.75rem;
+  --t-radius-lg: 1rem;
+  --t-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --t-body: "Figtree", system-ui, sans-serif;
+
+  /* Landing aliases */
+  --lp-bg: var(--t-bg);
+  --lp-surface: var(--t-surface);
+  --lp-text: var(--t-text);
+  --lp-muted: var(--t-muted);
+  --lp-accent: var(--t-accent);
+  --lp-accent-soft: var(--t-accent-soft);
+  --lp-display: var(--t-display);
+  --lp-body: var(--t-body);
+
   color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--t-bg);
+  color: var(--t-text);
+  font-family: var(--t-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.tether-app {
+  min-height: 100dvh;
+  background: var(--t-bg);
+  color: var(--t-text);
+  font-family: var(--t-body);
+}
+
+.font-display {
+  font-family: var(--t-display);
+}
+
+/* —— Landing atmosphere —— */
+.landing {
+  position: relative;
+  background: var(--t-bg);
+  font-family: var(--t-body);
 }
 
 .landing-atmosphere {
@@ -28,7 +80,7 @@
     radial-gradient(ellipse 90% 60% at 10% -10%, rgba(110, 231, 183, 0.09), transparent 55%),
     radial-gradient(ellipse 70% 50% at 95% 15%, rgba(255, 255, 255, 0.04), transparent 50%),
     radial-gradient(ellipse 60% 40% at 50% 100%, rgba(110, 231, 183, 0.04), transparent 55%),
-    var(--lp-bg);
+    var(--t-bg);
 }
 
 .landing-grain {
@@ -48,7 +100,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 0.75rem;
+  border-radius: var(--t-radius);
   padding: 0.55rem 1.15rem;
   font-size: 0.9rem;
   font-weight: 600;
@@ -64,7 +116,7 @@
 }
 
 .lp-btn:focus-visible {
-  outline: 2px solid var(--lp-accent);
+  outline: 2px solid var(--t-accent);
   outline-offset: 3px;
 }
 
@@ -79,19 +131,19 @@
 }
 
 .lp-btn-primary {
-  background: var(--lp-accent);
-  color: #0a0a0b;
+  background: var(--t-accent);
+  color: var(--t-accent-ink);
   border: 1px solid transparent;
 }
 
 .lp-btn-primary:hover {
-  background: #8ef0c8;
+  background: var(--t-accent-hover);
 }
 
 .lp-btn-secondary {
   background: transparent;
-  color: var(--lp-text);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--t-text);
+  border: 1px solid var(--t-border-strong);
 }
 
 .lp-btn-secondary:hover {
@@ -101,12 +153,12 @@
 
 .lp-btn-ghost {
   background: transparent;
-  color: var(--lp-muted);
+  color: var(--t-muted);
   border: 1px solid transparent;
 }
 
 .lp-btn-ghost:hover {
-  color: var(--lp-text);
+  color: var(--t-text);
 }
 
 .lp-hero-glow {
@@ -119,6 +171,18 @@
     rgba(110, 231, 183, 0.1),
     transparent 60%
   );
+}
+
+/* Soft ambient for app shell pages */
+.app-atmosphere {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 0% 0%, rgba(110, 231, 183, 0.05), transparent 50%),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(110, 231, 183, 0.03), transparent 50%),
+    var(--t-bg);
 }
 
 @media (prefers-reduced-motion: reduce) {

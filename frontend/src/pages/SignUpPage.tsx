@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import Logo from "../assets/logo-transparent-cropped.png";
-import { Mail, User, Lock, EyeOff, Eye, Loader2 } from "lucide-react";
+import { Mail, User, Lock, EyeOff, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ThreeDMarquee } from "../components/ThreeDMarquee";
 import marqueeImages from "../constants/images";
 import toast from "react-hot-toast";
+import { Button, Input } from "../components/ui";
 
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -36,127 +37,100 @@ const SignUpPage = () => {
   };
 
   return (
-    <div style={{maxHeight:"calc(100vh - 64px)"}} className="min-h-screen grid lg:grid-cols-2 overflow-hidden">
-      {/* Left side: Image or illustration */}
-      <div className="flex flex-col justify-center items-center p-6 sm:p-12">
-        <div className="max-w-md w-full space-y-8">
-          {/*logo*/}
-          <div className="text-center mb-8">
-            <div className="flex flex-col items-center gap-2 group">
-              
-              <img src={Logo} alt="Logo" style={{ width: 150 }} />
-              
-              <h1 className="text-2xl font-bold mt-2">Create Account</h1>
-              <p className="text-base-content/60">
+    <div className="relative grid min-h-dvh overflow-hidden lg:grid-cols-2">
+      <div className="app-atmosphere lg:hidden" aria-hidden="true" />
+      <div className="relative z-10 flex flex-col items-center justify-center overflow-y-auto p-6 sm:p-12">
+        <div className="w-full max-w-md space-y-8 py-8">
+          <div className="mb-2 text-center">
+            <div className="flex flex-col items-center gap-2">
+              <Link to="/">
+                <img src={Logo} alt="Tether" className="h-auto w-[150px]" />
+              </Link>
+              <h1 className="font-display mt-2 text-2xl font-semibold tracking-tight">
+                Create account
+              </h1>
+              <p className="text-[var(--t-muted)]">
                 Create an account to get started
               </p>
             </div>
           </div>
 
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="form-control">
-              <label className="label" htmlFor="fullName">
-                <span className="label-text font-medium">Full Name</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
-                  <User className="size-5 text-base-content/40" />
-                </div>
-                <input
-                  type="text"
-                  id="fullName"
-                  value={formData.fullName}
-                  onChange={(e) =>
-                    setFormData({ ...formData, fullName: e.target.value })
-                  }
-                  className="input input-bordered w-full pl-10"
-                  placeholder="John Doe"
-                />
-              </div>
-            </div>
-            <div className="form-control">
-              <label className="label" htmlFor="Email">
-                <span className="label-text font-medium">Email</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center z-10">
-                  <Mail className="size-5 text-base-content/40" />
-                </div>
-                <input
-                  type="email"
-                  id="Email"
-                  value={formData.email}
-                  className="input input-bordered w-full pl-10"
-                  placeholder="you@example.com"
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                />
-              </div>
-            </div>
-            <div className="form-control">
-              <label className="label" htmlFor="Password">
-                <span className="label-text font-medium">Password</span>
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center z-10">
-                  <Lock className="size-5 text-base-content/40" />
-                </div>
-                <input
-                  type={showPassword ? "text" : "password"}
-                  id="Password"
-                  value={formData.password}
-                  className="input input-bordered w-full pl-10"
-                  placeholder="*******"
-                  onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
-                  }
-                />
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <Input
+              label="Full Name"
+              type="text"
+              id="fullName"
+              value={formData.fullName}
+              placeholder="John Doe"
+              leftIcon={<User className="size-5" />}
+              onChange={(e) =>
+                setFormData({ ...formData, fullName: e.target.value })
+              }
+            />
+
+            <Input
+              label="Email"
+              type="email"
+              id="Email"
+              value={formData.email}
+              placeholder="you@example.com"
+              leftIcon={<Mail className="size-5" />}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+            />
+
+            <Input
+              label="Password"
+              type={showPassword ? "text" : "password"}
+              id="Password"
+              value={formData.password}
+              placeholder="••••••••"
+              leftIcon={<Lock className="size-5" />}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              rightSlot={
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="rounded-md p-1.5 text-[var(--t-faint)] hover:text-[var(--t-text)]"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? (
-                    <EyeOff className="size-5 text-base-content/40" />
+                    <EyeOff className="size-5" />
                   ) : (
-                    <Eye className="size-5 text-base-content/40" />
+                    <Eye className="size-5" />
                   )}
                 </button>
-              </div>
-            </div>
+              }
+            />
 
-            <button
+            <Button
               type="submit"
-              className={`btn btn-primary w-full ${
-                isSigningUp ? "loading" : ""
-              }`}
-              disabled={isSigningUp}
+              className="w-full"
+              size="lg"
+              loading={isSigningUp}
             >
-              {isSigningUp ? (
-                <>
-                  <Loader2 className="animate-spin size-5" />
-                  <span className="ml-2">Signing Up...</span>
-                </>
-              ) : (
-                "Sign Up"
-              )}
-            </button>
+              {isSigningUp ? "Signing up..." : "Sign up"}
+            </Button>
           </form>
 
-          <div className="text-center">
-            <p className="text-base-content/60">
-              Already have an account?{" "}
-              <Link to="/login" className="link link-primary">
-                Sign In{" "}
-              </Link>
-            </p>
-          </div>
+          <p className="text-center text-[var(--t-muted)]">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="font-semibold text-[var(--t-accent)] hover:text-[var(--t-accent-hover)]"
+            >
+              Sign in
+            </Link>
+          </p>
         </div>
       </div>
-      {/* Right side: Background image or illustration */}
-      <ThreeDMarquee images={marqueeImages} />
+
+      <div className="hidden border-l border-[var(--t-border)] lg:block">
+        <ThreeDMarquee images={marqueeImages} />
+      </div>
     </div>
   );
 };

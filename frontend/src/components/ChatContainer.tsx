@@ -8,6 +8,8 @@ import DefaultAvatar from "../assets/avatar.png";
 import { formatDate } from "../lib/utils";
 import BouncingIcon from "./BouncingIcon";
 import toast from "react-hot-toast";
+import { Avatar } from "./ui";
+import { cn } from "../lib/utils";
 
 const ChatContainer = () => {
   const {
@@ -52,7 +54,7 @@ const ChatContainer = () => {
 
   if (isMessagesLoading) {
     return (
-      <div className="flex-1 flex flex-col overflow-auto">
+      <div className="flex flex-1 flex-col overflow-auto">
         <ChatHeader />
         <MessageSkeleton />
         <MessageInput />
@@ -61,78 +63,75 @@ const ChatContainer = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full">
+    <div className="flex h-full flex-1 flex-col bg-[var(--t-surface)]">
       <ChatHeader />
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 space-y-4 overflow-y-auto p-4">
         {messages.length === 0 ? (
-          <>
-            <div className="w-full h-full flex flex-col justify-center items-center">
-              <BouncingIcon />
-              <div className="text-center text-base-content/60 text-2xl relative bottom-4">
-                No chats to display!
-              </div>
-            </div>
-          </>
+          <div className="flex h-full w-full flex-col items-center justify-center">
+            <BouncingIcon />
+            <p className="relative bottom-4 text-center text-lg text-[var(--t-muted)]">
+              No chats to display!
+            </p>
+          </div>
         ) : (
-          messages.map((message, index) => (
-            <div
-              key={message._id}
-              ref={index === messages.length - 1 ? messagesEndRef : null}
-              className={`chat
-              ${
-                message.senderId === authUser?._id &&
-                message.receiverId === selectedUser?._id
-                  ? "chat-end"
-                  : message.senderId === selectedUser?._id &&
-                    message.receiverId === authUser?._id
-                  ? "chat-start"
-                  : "hidden"
-              }
-            `}
-            >
-              <div className="chat-image avatar">
-                <div className="size-10 rounded-full">
-                  <img
-                    src={
-                      message.senderId == authUser?._id
-                        ? authUser?.profilePic || DefaultAvatar
-                        : selectedUser?.profilePic || DefaultAvatar
-                    }
-                    alt="User"
-                  />
-                </div>
-              </div>
-              <div className="chat-header mb-1 flex flex-col">
-                <time
-                  style={{
-                    alignSelf: `${
-                      message.senderId == authUser?._id ? "end" : "start"
-                    }`,
-                  }}
-                  className="text-xs opacity-50"
-                >
-                  {formatDate(message.createdAt)}
-                </time>
+          messages.map((message, index) => {
+            const isMine =
+              message.senderId === authUser?._id &&
+              message.receiverId === selectedUser?._id;
+            const isTheirs =
+              message.senderId === selectedUser?._id &&
+              message.receiverId === authUser?._id;
+
+            if (!isMine && !isTheirs) return null;
+
+            return (
+              <div
+                key={message._id}
+                ref={index === messages.length - 1 ? messagesEndRef : null}
+                className={cn(
+                  "flex gap-2.5",
+                  isMine ? "flex-row-reverse" : "flex-row"
+                )}
+              >
+                <Avatar
+                  src={
+                    isMine
+                      ? authUser?.profilePic || DefaultAvatar
+                      : selectedUser?.profilePic || DefaultAvatar
+                  }
+                  name={isMine ? authUser?.fullName : selectedUser?.fullName}
+                  size="sm"
+                />
                 <div
-                  style={{
-                    alignSelf: `${
-                      message.senderId == authUser?._id ? "end" : "start"
-                    }`,
-                  }}
-                  className="chat-bubble flex flex-col"
-                >
-                  {message.image && (
-                    <img
-                      src={message.image}
-                      alt="Message"
-                      className="mt-2 rounded-lg max-w-xs"
-                    />
+                  className={cn(
+                    "flex max-w-[75%] flex-col gap-1",
+                    isMine ? "items-end" : "items-start"
                   )}
-                  {message.message}
+                >
+                  <time className="px-1 text-[11px] text-[var(--t-faint)]">
+                    {formatDate(message.createdAt)}
+                  </time>
+                  <div
+                    className={cn(
+                      "rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
+                      isMine
+                        ? "rounded-br-md bg-[var(--t-accent)] text-[var(--t-accent-ink)]"
+                        : "rounded-bl-md bg-[var(--t-surface-2)] text-[var(--t-text)]"
+                    )}
+                  >
+                    {message.image && (
+                      <img
+                        src={message.image}
+                        alt="Message"
+                        className="mb-2 max-w-xs rounded-[var(--t-radius)]"
+                      />
+                    )}
+                    {message.message}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
       <MessageInput />

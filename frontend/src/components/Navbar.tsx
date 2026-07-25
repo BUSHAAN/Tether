@@ -1,65 +1,41 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import Logo from "../assets/logo-transparent.png";
-import LogoLight from "../assets/logo.png";
-import { LogOut, Moon, Sun, User } from "lucide-react";
-import { useThemeStore } from "../store/useThemeStore";
+import Logo from "../assets/logo-transparent-cropped.png";
+import { LogOut, User } from "lucide-react";
+import { Button } from "./ui";
 
 const Navbar = () => {
   const { logout } = useAuthStore();
-  const { theme, setTheme } = useThemeStore();
-
-  const onThemeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTheme = e.target.checked ? "dark" : "nord";
-    setTheme(newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-  };
 
   return (
-    <header
-      className=" bg-base-100 border-b border-base-300 
-    fixed w-full top-0 z-40 backdrop-blur-lg"
-    >
-      <div className="container mx-auto px-4 h-16">
-        <div className="flex items-center justify-between h-full">
-          <div className="flex items-center gap-8">
-            <Link
-              to="/chat"
-              className="flex items-center gap-2.5 hover:opacity-80
-               transition-all"
-            >
-              <div
-                className="size-9 rounded-full overflow-hidden
-                 bg-base-200 flex items-center justify-center"
-              >
-                <img src={theme == "dark" ? Logo : LogoLight} alt="Logo" />
-              </div>
-              <h1 className="text-lg font-bold">Tether</h1>
-            </Link>
-          </div>
-          <div className="flex items-center gap-2">
-            <label className="toggle text-base-content w-11 px-0 h-5.5 rounded-full">
-              <input
-                onChange={onThemeChange}
-                checked={theme === "dark" ? true : false}
-                type="checkbox"
-                className="rounded-full"
-              />
-              <Sun className="size-5" />
-              <Moon className="size-5" />
-            </label>
-            <Link to="/profile" className="btn btn-sm gap-2 transition-colors">
-              <User className="size-5" />
-              <span className="hidden sm:inline">Profile</span>
-            </Link>
-            <button
-              className="flex items-center btn btn-sm gap-2 transition-colors"
-              onClick={logout}
-            >
-              <LogOut className="size-5" />
-              <span className="hidden sm:inline">Logout</span>
-            </button>
-          </div>
+    <header className="fixed top-0 z-40 w-full border-b border-[var(--t-border)] bg-[var(--t-surface)]/80 backdrop-blur-xl">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+        <Link
+          to="/chat"
+          className="flex items-center gap-2.5 transition-opacity hover:opacity-80"
+        >
+          <img src={Logo} alt="Tether" className="h-9 w-auto" />
+          <span className="font-display text-lg font-bold tracking-tight text-[var(--t-text)]">
+            Tether
+          </span>
+        </Link>
+
+        <div className="flex items-center gap-2">
+          <Link
+            to="/profile"
+            className="inline-flex min-h-9 items-center gap-1.5 rounded-[var(--t-radius)] border border-transparent px-3 text-sm font-semibold text-[var(--t-muted)] transition-colors hover:bg-white/[0.05] hover:text-[var(--t-text)] focus-visible:outline-2 focus-visible:outline-[var(--t-accent)] focus-visible:outline-offset-2"
+          >
+            <User className="size-4" />
+            <span className="hidden sm:inline">Profile</span>
+          </Link>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={logout}
+            leftIcon={<LogOut className="size-4" />}
+          >
+            <span className="hidden sm:inline">Logout</span>
+          </Button>
         </div>
       </div>
     </header>

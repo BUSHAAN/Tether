@@ -2,14 +2,13 @@ import BouncingIcon from "./BouncingIcon";
 
 const NoChatSelected = () => {
   return (
-    <div className="w-full flex flex-1 flex-col items-center justify-center p-16 bg-base-100/50">
-      <div className="max-w-md text-center space-y-6">
-        {/* Icon Display */}
+    <div className="flex w-full flex-1 flex-col items-center justify-center bg-[var(--t-surface)]/50 p-10 sm:p-16">
+      <div className="max-w-md space-y-6 text-center">
         <BouncingIcon />
-
-        {/* Welcome Text */}
-        <h2 className="text-2xl font-bold">Welcome to Tether!</h2>
-        <p className="text-base-content/60">
+        <h2 className="font-display text-2xl font-semibold tracking-tight text-[var(--t-text)]">
+          Welcome to Tether
+        </h2>
+        <p className="text-[var(--t-muted)]">
           Select a conversation from the sidebar to start chatting
         </p>
       </div>

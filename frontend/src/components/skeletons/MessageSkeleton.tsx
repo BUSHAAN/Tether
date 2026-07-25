@@ -1,28 +1,36 @@
+import { Skeleton } from "../ui";
+import { cn } from "../../lib/utils";
+
 const MessageSkeleton = () => {
-    // Create an array of 6 items for skeleton messages
-    const skeletonMessages = Array(6).fill(null);
-  
-    return (
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {skeletonMessages.map((_, idx) => (
-          <div key={idx} className={`chat ${idx % 2 === 0 ? "chat-start" : "chat-end"}`}>
-            <div className="chat-image avatar">
-              <div className="size-10 rounded-full">
-                <div className="skeleton w-full h-full rounded-full" />
-              </div>
-            </div>
-  
-            <div className="chat-header mb-1">
-              <div className="skeleton h-4 w-16" />
-            </div>
-  
-            <div className="chat-bubble bg-transparent p-0">
-              <div className="skeleton h-16 w-[200px]" />
+  const skeletonMessages = Array(6).fill(null);
+
+  return (
+    <div className="flex-1 space-y-4 overflow-y-auto p-4">
+      {skeletonMessages.map((_, idx) => {
+        const isMine = idx % 2 !== 0;
+        return (
+          <div
+            key={idx}
+            className={cn(
+              "flex gap-2.5",
+              isMine ? "flex-row-reverse" : "flex-row"
+            )}
+          >
+            <Skeleton className="size-8 shrink-0 rounded-full" />
+            <div
+              className={cn(
+                "flex flex-col gap-1",
+                isMine ? "items-end" : "items-start"
+              )}
+            >
+              <Skeleton className="h-3 w-16" />
+              <Skeleton className="h-14 w-[200px] rounded-2xl" />
             </div>
           </div>
-        ))}
-      </div>
-    );
-  };
-  
-  export default MessageSkeleton;
+        );
+      })}
+    </div>
+  );
+};
+
+export default MessageSkeleton;
