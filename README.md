@@ -11,7 +11,7 @@
 
 Tether is a simple real-time chat application built with the MERN stack. Originally started as a practice project to learn **Socket.IO**, it evolved into a fully functional messaging app with real-time capabilities and a responsive UI.
 
-🌐 **Live Demo:** [https://tether.ip-ddns.com](https://tether.ip-ddns.com)
+🌐 **Check it out at:** [https://tether.bushaan.dev/](https://tether.bushaan.dev/)
 
 ---
 
