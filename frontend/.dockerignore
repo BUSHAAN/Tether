@@ -1,0 +1,16 @@
+node_modules
+dist
+dist-ssr
+npm-debug.log*
+pnpm-debug.log*
+.gitignore
+.env
+.env.*
+*.local
+*.md
+.DS_Store
+.vscode
+.idea
+Dockerfile
+.dockerignore
+eslint.config.js

@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "description": "Tether — real-time chat app",
+  "packageManager": "pnpm@10.32.1",
   "scripts": {
-    "install:all": "npm install --prefix backend && npm install --prefix frontend",
-    "dev": "concurrently -n backend,frontend -c teal,magenta \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\"",
-    "dev:backend": "npm run dev --prefix backend",
-    "dev:frontend": "npm run dev --prefix frontend",
-    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
-    "start": "npm run start --prefix backend"
+    "dev": "pnpm run --parallel --filter frontend --filter backend dev",
+    "dev:backend": "pnpm --filter backend dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "build": "pnpm --filter frontend build",
+    "start": "pnpm --filter backend start",
+    "lint": "pnpm --filter frontend lint"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
