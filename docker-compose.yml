@@ -1,0 +1,36 @@
+services:
+  frontend:
+    image: bushaan/tether-frontend:latest
+    container_name: tether-frontend
+    restart: unless-stopped
+    networks:
+      - tether-network
+
+  backend:
+    image: bushaan/tether-backend:latest
+    container_name: tether-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    networks:
+      - tether-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: tether-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - tether-network
+
+networks:
+  tether-network:
+    driver: bridge
