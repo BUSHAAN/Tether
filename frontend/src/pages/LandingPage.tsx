@@ -53,6 +53,8 @@ const roadmap = [
   "Seen & delivery status",
 ];
 
+const easeOutExpo = [0.22, 1, 0.36, 1] as const;
+
 const LandingPage = () => {
   const { authUser } = useAuthStore();
   const reduceMotion = useReducedMotion();
@@ -63,7 +65,7 @@ const LandingPage = () => {
       : {
           initial: { opacity: 0, y: 22 },
           animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] },
+          transition: { duration: 0.55, delay, ease: easeOutExpo },
         };
 
   return (
@@ -158,7 +160,7 @@ const LandingPage = () => {
               : {
                   initial: { opacity: 0 },
                   animate: { opacity: 1 },
-                  transition: { duration: 0.8, delay: 0.12, ease: [0.22, 1, 0.36, 1] },
+                  transition: { duration: 0.8, delay: 0.12, ease: easeOutExpo },
                 })}
           >
             <HeroChatVisual />
@@ -194,7 +196,7 @@ const LandingPage = () => {
                         transition: {
                           duration: 0.45,
                           delay: i * 0.05,
-                          ease: [0.22, 1, 0.36, 1],
+                          ease: easeOutExpo,
                         },
                       })}
                 >
@@ -401,7 +403,7 @@ function Bubble({
         : {
             initial: { opacity: 0, y: 10, scale: 0.98 },
             animate: { opacity: 1, y: 0, scale: 1 },
-            transition: { duration: 0.4, delay, ease: [0.22, 1, 0.36, 1] },
+            transition: { duration: 0.4, delay, ease: easeOutExpo },
           })}
     >
       {image ? (

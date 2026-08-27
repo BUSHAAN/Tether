@@ -8,9 +8,11 @@
     "dev": "concurrently -n backend,frontend -c teal,magenta \"pnpm --dir backend dev\" \"pnpm --dir frontend dev\"",
     "dev:backend": "pnpm --dir backend dev",
     "dev:frontend": "pnpm --dir frontend dev",
-    "build": "pnpm --dir frontend build",
+    "build": "pnpm run build:frontend && pnpm run build:backend",
+    "build:frontend": "pnpm --dir frontend build",
+    "build:backend": "pnpm --dir backend build",
     "start": "pnpm --dir backend start",
-    "lint": "pnpm --dir frontend lint"
+    "lint": "pnpm --dir frontend lint && pnpm --dir backend lint"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"
