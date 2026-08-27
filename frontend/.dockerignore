@@ -5,7 +5,8 @@ npm-debug.log*
 pnpm-debug.log*
 .gitignore
 .env
-.env.*
+.env.local
+.env.*.local
 *.local
 *.md
 .DS_Store

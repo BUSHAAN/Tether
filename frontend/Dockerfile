@@ -1,7 +1,9 @@
 # Build from frontend/:
 #   docker build -t tether-frontend .
-# With API target:
-#   docker build -t tether-frontend --build-arg VITE_API_URL=http://localhost:5000/api --build-arg VITE_SOCKET_URL=http://localhost:5000 .
+#
+# Vite loads .env.production during build.
+# Optional overrides:
+#   docker build -t tether-frontend --build-arg VITE_API_URL=https://... --build-arg VITE_SOCKET_URL=https://... .
 FROM node:22-alpine AS build
 
 WORKDIR /app
@@ -13,14 +15,14 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-ARG VITE_API_URL=http://localhost:5000/api
-ARG VITE_SOCKET_URL=http://localhost:5000
-ENV VITE_API_URL=$VITE_API_URL
-ENV VITE_SOCKET_URL=$VITE_SOCKET_URL
+# Only override .env.production when build-args are passed
+ARG VITE_API_URL
+ARG VITE_SOCKET_URL
+RUN if [ -n "$VITE_API_URL" ]; then echo "VITE_API_URL=$VITE_API_URL" >> .env.production; fi
+RUN if [ -n "$VITE_SOCKET_URL" ]; then echo "VITE_SOCKET_URL=$VITE_SOCKET_URL" >> .env.production; fi
 
 RUN pnpm build
 
-# Serve the built app (swap for nginx later if you want)
 FROM node:22-alpine
 
 WORKDIR /app
@@ -29,6 +31,6 @@ RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
 
 COPY --from=build /app /app
 
-EXPOSE 5173
+EXPOSE 4173
 
-CMD ["pnpm", "exec", "vite", "preview", "--host", "0.0.0.0", "--port", "5173"]
+CMD ["pnpm", "exec", "vite", "preview", "--host", "0.0.0.0", "--port", "4173"]
