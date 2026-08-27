@@ -5,12 +5,12 @@
   "description": "Tether — real-time chat app",
   "packageManager": "pnpm@10.32.1",
   "scripts": {
-    "dev": "pnpm run --parallel --filter frontend --filter backend dev",
-    "dev:backend": "pnpm --filter backend dev",
-    "dev:frontend": "pnpm --filter frontend dev",
-    "build": "pnpm --filter frontend build",
-    "start": "pnpm --filter backend start",
-    "lint": "pnpm --filter frontend lint"
+    "dev": "concurrently -n backend,frontend -c teal,magenta \"pnpm --dir backend dev\" \"pnpm --dir frontend dev\"",
+    "dev:backend": "pnpm --dir backend dev",
+    "dev:frontend": "pnpm --dir frontend dev",
+    "build": "pnpm --dir frontend build",
+    "start": "pnpm --dir backend start",
+    "lint": "pnpm --dir frontend lint"
   },
   "devDependencies": {
     "concurrently": "^9.2.1"

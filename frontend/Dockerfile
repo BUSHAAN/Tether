@@ -1,45 +1,33 @@
-# Build from repo root:
-#   docker build -f frontend/Dockerfile -t tether-frontend .
-# Optional API target (for separate backend container):
-#   --build-arg VITE_API_URL=http://localhost:5000/api
-#   --build-arg VITE_SOCKET_URL=http://localhost:5000
+# Build from frontend/:
+#   docker build -t tether-frontend .
+# With API target:
+#   docker build -t tether-frontend --build-arg VITE_API_URL=http://localhost:5000/api --build-arg VITE_SOCKET_URL=http://localhost:5000 .
 FROM node:20-alpine AS build
-
-RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
 
 WORKDIR /app
 
-COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
-COPY frontend/package.json ./frontend/
+COPY package.json pnpm-lock.yaml ./
 
-RUN pnpm install --frozen-lockfile --filter frontend...
+RUN corepack enable
+RUN pnpm install --frozen-lockfile
 
-COPY frontend ./frontend
+COPY . .
 
 ARG VITE_API_URL=http://localhost:5000/api
 ARG VITE_SOCKET_URL=http://localhost:5000
 ENV VITE_API_URL=$VITE_API_URL
 ENV VITE_SOCKET_URL=$VITE_SOCKET_URL
 
-RUN pnpm --filter frontend build
+RUN pnpm build
 
-# ---- serve built app with Vite preview (no nginx yet) ----
+# Serve the built app (swap for nginx later if you want)
 FROM node:20-alpine
-
-RUN corepack enable && corepack prepare pnpm@10.32.1 --activate
 
 WORKDIR /app
 
-COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
-COPY frontend/package.json ./frontend/
+RUN corepack enable
 
-RUN pnpm install --frozen-lockfile --filter frontend...
-
-COPY --from=build /app/frontend/dist ./frontend/dist
-COPY frontend/vite.config.ts ./frontend/
-COPY frontend/index.html ./frontend/
-
-WORKDIR /app/frontend
+COPY --from=build /app /app
 
 EXPOSE 4173
 
