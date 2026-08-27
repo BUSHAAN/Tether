@@ -1,13 +1,17 @@
 services:
   frontend:
-    image: bushaan/tether-frontend:latest
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: tether-frontend
     restart: unless-stopped
     networks:
       - tether-network
 
   backend:
-    image: bushaan/tether-backend:latest
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: tether-backend
     restart: unless-stopped
     env_file:
